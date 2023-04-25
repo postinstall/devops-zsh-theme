@@ -22,3 +22,7 @@ Kudos to: https://blog.carbonfive.com/writing-zsh-themes-a-quickref/ for the ins
 - Clone repo and copy `devops.zsh-theme` to `~/.oh-my-zsh/custom/themes`.
 - Add `ZSH_THEME="devops"` to `~/.zshrc`.
 - Restart shell.
+
+## Screenshot
+
+![Screenshot](screenshot.png)
