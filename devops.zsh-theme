@@ -40,7 +40,15 @@ kubeprompt() {
 
 # display current context
 ctx() {
-    yq '.contexts[].name' $kubeconfig | grep --color=always "$kubecontext\|$"
+    if [[ -z "$KUBECONFIG" ]]; then
+        export kubeconfig="$HOME/.kube/config"
+    else
+        export kubeconfig="$KUBECONFIG"
+    fi
+    if [ -f $kubeconfig ]; then
+        export kubecontext="$(yq '.current-context' $kubeconfig)"
+        yq '.contexts[].name' $kubeconfig | grep --color=always "$kubecontext\|$"
+    fi
 }
 
 # display current namespace
