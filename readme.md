@@ -1,8 +1,8 @@
 # DevOps ZSH-Theme
 
-Author: Sascha Mario Klein
-E-Mail: postinstall@neuroticfish.com
-GitHub: https://github.com/postinstall
+- Author: Sascha Mario Klein
+- E-Mail: postinstall@neuroticfish.com
+- GitHub: https://github.com/postinstall
 
 ## About
 
