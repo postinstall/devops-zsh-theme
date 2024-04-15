@@ -21,6 +21,17 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 ARROW_BG=235
 ARROW_FG=242
 
+function git_branch_name()
+{
+  branch=$(git symbolic-ref HEAD 2> /dev/null | awk 'BEGIN{FS="/"} {print $NF}')
+  if [[ $branch == "" ]];
+  then
+    :
+  else
+    echo ' ('$branch')'
+  fi
+}
+
 # parse kubeconfig
 kubeprompt() {
     if [[ -z "$KUBECONFIG" ]]; then
@@ -51,6 +62,13 @@ ctx() {
     fi
 }
 
+# unset aws vars
+awsunset() {
+    for i in `set | grep -i AWS_ | cut -d"=" -f1`; do
+        unset $i
+    done
+}
+
 # display current namespace
 ns() {
     echo $ZSH_KUBECTL_PROMPT
@@ -78,8 +96,8 @@ endsep() {
 
 # modify git prompt
 gitprompt() {
-    if [ "$(git_prompt_info)" != "" ]; then
-        echo " $(sep)$(git_prompt_info)%{$reset_color%}%{$BG[$ARROW_BG]%}%{$FG[$ARROW_FG]%}"
+    if [ "$(git_branch_name)" != "" ]; then
+        echo " $(sep)$(git_branch_name)%{$reset_color%}%{$BG[$ARROW_BG]%}%{$FG[$ARROW_FG]%}"
     fi
 }
 
@@ -90,8 +108,21 @@ venvprompt() {
     fi
 }
 
+awsvault() {
+    if [[ ! -z $AWS_VAULT ]]; then
+        epoch=$(date -j -u -f %Y-%m-%dT%H:%M:%SZ "${AWS_CREDENTIAL_EXPIRATION}" +%s)
+        now=$(date +%s)
+        valid="$(($epoch-$now))"
+        if [ "${valid}" -gt "0" ]; then
+            echo "[${AWS_VAULT}:${valid}s] "
+        else
+            echo "%{$fg[red]%}[${AWS_VAULT}:N/A]%{$reset_color%} "
+        fi
+    fi
+}
+
 # putting it all together
 autoload -U colors; colors
 NEWLINE=$'\n'
-PROMPT='${NEWLINE}%{$BG[$ARROW_BG]%}%{$fg[white]%}%* $(sep) %{$fg[cyan]%}%n $(sep) %{$fg[green]%}%~$(venvprompt)$(gitprompt) $(endsep) '
+PROMPT='${NEWLINE}%{$BG[$ARROW_BG]%}%{$fg[white]%}%* $(awsvault)$(sep) %{$fg[green]%}%~$(venvprompt)$(gitprompt) $(endsep) '
 RPROMPT='%{$fg[red]%}($(kubeprompt))%{$reset_color%}'
