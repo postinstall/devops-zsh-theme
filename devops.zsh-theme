@@ -124,5 +124,8 @@ awsvault() {
 # putting it all together
 autoload -U colors; colors
 NEWLINE=$'\n'
-PROMPT='${NEWLINE}%{$BG[$ARROW_BG]%}%{$fg[white]%}%* $(awsvault)$(sep) %{$fg[green]%}%~$(venvprompt)$(gitprompt) $(endsep) '
-RPROMPT='%{$fg[red]%}($(kubeprompt))%{$reset_color%}'
+PROMPT='${NEWLINE}%{$BG[$ARROW_BG]%}%{$fg[cyan]%} ($(hostname -s)) $(awsvault)$(sep) %{$fg[green]%}%~$(venvprompt)$(gitprompt) $(endsep) '
+
+if [ "$(kubeprompt)" != "N/A" ]; then
+    RPROMPT='%{$fg[red]%}($(kubeprompt))%{$reset_color%}'
+fi
