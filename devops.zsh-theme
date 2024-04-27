@@ -97,7 +97,7 @@ endsep() {
 # modify git prompt
 gitprompt() {
     if [ "$(git_branch_name)" != "" ]; then
-        echo " $(sep)$(git_branch_name)%{$reset_color%}%{$BG[$ARROW_BG]%}%{$FG[$ARROW_FG]%}"
+        echo " $(sep)%{$fg[yellow]%}$(git_branch_name)%{$reset_color%}%{$BG[$ARROW_BG]%}%{$FG[$ARROW_FG]%}"
     fi
 }
 
@@ -124,7 +124,7 @@ awsvault() {
 # putting it all together
 autoload -U colors; colors
 NEWLINE=$'\n'
-PROMPT='${NEWLINE}%{$BG[$ARROW_BG]%}%{$fg[cyan]%} ($(hostname -s)) $(awsvault)$(sep) %{$fg[green]%}%~$(venvprompt)$(gitprompt) $(endsep) '
+PROMPT='${NEWLINE}%{$BG[$ARROW_BG]%}%{$fg[cyan]%} :$(hostname -s): $(awsvault)$(sep) %{$fg[green]%}%~$(venvprompt)$(gitprompt) $(endsep) '
 
 if [ "$(kubeprompt)" != "N/A" ]; then
     RPROMPT='%{$fg[red]%}($(kubeprompt))%{$reset_color%}'
